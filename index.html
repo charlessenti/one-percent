@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F6F5EF">
+
+  <title>1%</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg: #F6F5EF;
+      --card: #FFFFFF;
+      --text: #111111;
+      --muted: #888888;
+      --border: #E4E3DC;
+      --done: #F0F4EC;
+      --done-border: #D9E2D2;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 520px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 24px 22px 115px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 44px;
+    }
+
+    .logo {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -2px;
+    }
+
+    .tag {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1.7px;
+      color: #999;
+    }
+
+    .eyebrow {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #777;
+    }
+
+    h1 {
+      font-size: 34px;
+      line-height: 1.05;
+      letter-spacing: -1.3px;
+      margin: 8px 0 0;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      line-height: 22px;
+      color: #777;
+      margin: 8px 0 27px;
+    }
+
+    .habits {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .habit {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      text-align: left;
+      color: var(--text);
+      transition: 0.15s ease;
+    }
+
+    .habit.done {
+      background: var(--done);
+      border-color: var(--done-border);
+    }
+
+    .habit-left {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .habit-icon {
+      width: 40px;
+      flex-shrink: 0;
+      font-size: 22px;
+    }
+
+    .habit-name {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .habit-rule {
+      font-size: 11px;
+      color: #999;
+      margin-top: 3px;
+    }
+
+    .checkbox {
+      width: 29px;
+      height: 29px;
+      flex-shrink: 0;
+      border: 1.5px solid #CCC;
+      border-radius: 50%;
+      margin-left: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .habit.done .checkbox {
+      background: #171717;
+      border-color: #171717;
+      color: white;
+    }
+
+    .daily-summary {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .daily-number {
+      font-size: 40px;
+      font-weight: 900;
+    }
+
+    .daily-label {
+      color: #888;
+      font-size: 12px;
+    }
+
+    .save-button {
+      width: 100%;
+      border: 0;
+      background: #171717;
+      color: white;
+      border-radius: 18px;
+      padding: 18px;
+      font-size: 16px;
+      font-weight: 700;
+      margin-top: 24px;
+      cursor: pointer;
+    }
+
+    .capital {
+      font-size: 66px;
+      font-weight: 900;
+      letter-spacing: -3px;
+      margin-top: 4px;
+      line-height: 1.05;
+    }
+
+    .capital-label {
+      font-size: 17px;
+      font-weight: 700;
+      color: #555;
+    }
+
+    .capital-base {
+      font-size: 11px;
+      color: #999;
+      margin-top: 5px;
+    }
+
+    .chart-container {
+      height: 180px;
+      margin-top: 25px;
+      position: relative;
+    }
+
+    #chart {
+      width: 100%;
+      height: 160px;
+      overflow: visible;
+    }
+
+    .legend {
+      display: flex;
+      gap: 18px;
+      margin-top: 3px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      font-size: 10px;
+      color: #777;
+    }
+
+    .legend-line {
+      width: 18px;
+      height: 3px;
+      background: #171717;
+      margin-right: 6px;
+    }
+
+    .legend-line.grey {
+      height: 1px;
+      background: #AAA;
+    }
+
+    .stats {
+      display: flex;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 0;
+      margin-top: 34px;
+    }
+
+    .stat {
+      flex: 1;
+      text-align: center;
+    }
+
+    .stat + .stat {
+      border-left: 1px solid #E5E4DE;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #888;
+      margin-top: 3px;
+    }
+
+    .section-title {
+      font-size: 23px;
+      font-weight: 900;
+      margin-top: 38px;
+    }
+
+    .section-subtitle {
+      color: #888;
+      font-size: 12px;
+      margin-top: 5px;
+      margin-bottom: 20px;
+    }
+
+    .progress-list {
+      display: flex;
+      flex-direction: column;
+      gap: 17px;
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+    }
+
+    .progress-icon {
+      width: 38px;
+      font-size: 21px;
+      flex-shrink: 0;
+    }
+
+    .progress-content {
+      flex: 1;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .progress-name {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .progress-value {
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .track {
+      height: 6px;
+      background: #E6E5DF;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .fill {
+      height: 100%;
+      background: #171717;
+      border-radius: 3px;
+    }
+
+    .compound-note {
+      margin-top: 36px;
+      background: #ECEBE5;
+      border-radius: 18px;
+      padding: 19px;
+    }
+
+    .compound-title {
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .compound-text {
+      font-size: 13px;
+      line-height: 20px;
+      color: #666;
+      margin-top: 7px;
+    }
+
+    .nav {
+      position: fixed;
+      z-index: 10;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      width: 100%;
+      max-width: 520px;
+      height: calc(78px + env(safe-area-inset-bottom));
+      padding-bottom: env(safe-area-inset-bottom);
+      background: rgba(250, 250, 247, 0.96);
+      border-top: 1px solid #E2E1DA;
+      display: flex;
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-button {
+      flex: 1;
+      border: 0;
+      background: transparent;
+      color: #999;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .nav-button.active {
+      color: #111;
+      font-weight: 800;
+    }
+
+    .nav-button.active::after {
+      content: "";
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #111;
+      border-radius: 50%;
+      bottom: 17px;
+      left: calc(50% - 2px);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .empty-chart {
+      height: 150px;
+      border-bottom: 1px solid #DDD;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #999;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (min-width: 700px) {
+      .app {
+        padding-top: 35px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="app">
+
+    <header class="header">
+      <div class="logo">1%</div>
+      <div class="tag">UN JOUR À LA FOIS</div>
+    </header>
+
+    <!-- AUJOURD'HUI -->
+
+    <section id="todayScreen">
+
+      <div class="eyebrow" id="todayDate"></div>
+
+      <h1>Mon 1% aujourd'hui</h1>
+
+      <p class="subtitle">
+        Les petites actions qui construisent la trajectoire.
+      </p>
+
+      <div class="habits" id="habitList"></div>
+
+      <div class="daily-summary">
+        <div class="daily-number" id="dailyNumber">0/7</div>
+        <div class="daily-label">aujourd'hui</div>
+      </div>
+
+      <button class="save-button" id="saveButton">
+        Enregistrer ma journée
+      </button>
+
+    </section>
+
+    <!-- TRAJECTOIRE -->
+
+    <section id="trajectoryScreen" class="hidden">
+
+      <div class="eyebrow">MA TRAJECTOIRE</div>
+
+      <div class="capital" id="capitalValue">+0.0%</div>
+
+      <div class="capital-label">
+        de capital construit
+      </div>
+
+      <div class="capital-base">
+        depuis le début de ma trajectoire
+      </div>
+
+      <div class="chart-container" id="chartContainer"></div>
+
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-line"></div>
+          Ma trajectoire
+        </div>
+
+        <div class="legend-item">
+          <div class="legend-line grey"></div>
+          Potentiel 1%
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value" id="daysValue">0</div>
+          <div class="stat-label">jours</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-value" id="weekValue">0%</div>
+          <div class="stat-label">cette semaine</div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        Cette semaine
+      </div>
+
+      <div class="section-subtitle">
+        6/7 suffit pour les habitudes avec un jour off.
+      </div>
+
+      <div class="progress-list" id="progressList"></div>
+
+      <div class="compound-note">
+        <div class="compound-title">
+          L'effet composé
+        </div>
+
+        <div class="compound-text">
+          Chaque jour peut ajouter jusqu'à 1 % à ta trajectoire.
+          Pour les habitudes en 6/7, ton premier jour off de la
+          semaine ne ralentit pas la progression. La régularité
+          compte davantage que la perfection.
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <nav class="nav">
+
+    <button class="nav-button active" id="todayNav">
+      Aujourd'hui
+    </button>
+
+    <button class="nav-button" id="trajectoryNav">
+      Trajectoire
+    </button>
+
+  </nav>
+
+<script>
+
+const STORAGE_KEY = "onepercent_v1";
+
+const habits = [
+  { id: "steps", icon: "🚶", name: "10 000 pas", target: 7 },
+  { id: "sport", icon: "🏋️", name: "Muscu ou cardio", target: 6 },
+  { id: "reading", icon: "📖", name: "Lire 10 pages", target: 6 },
+  { id: "sleep", icon: "😴", name: "8 h de sommeil", target: 7 },
+  { id: "social", icon: "🤝", name: "Proposer quelque chose", target: 6 },
+  { id: "meditation", icon: "🧘", name: "1 séance de méditation", target: 6 },
+  { id: "create", icon: "🛠️", name: "Créer quelque chose", target: 6 }
+];
+
+let history = {};
+let todayChecks = {};
+let saved = false;
+
+function getDateKey(date = new Date()) {
+
+  const y = date.getFullYear();
+
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+
+  const d = String(date.getDate()).padStart(2, "0");
+
+  return `${y}-${m}-${d}`;
+}
+
+function dateFromKey(key) {
+
+  const [y, m, d] = key.split("-").map(Number);
+
+  return new Date(y, m - 1, d);
+}
+
+function getMonday(date = new Date()) {
+
+  const copy = new Date(date);
+
+  const day = copy.getDay();
+
+  const diff = day === 0 ? -6 : 1 - day;
+
+  copy.setDate(copy.getDate() + diff);
+
+  copy.setHours(0, 0, 0, 0);
+
+  return copy;
+}
+
+function getWeekId(date) {
+  return getDateKey(getMonday(date));
+}
+
+function getWeekKeys(reference = new Date()) {
+
+  const monday = getMonday(reference);
+
+  return Array.from({ length: 7 }, (_, i) => {
+
+    const date = new Date(monday);
+
+    date.setDate(monday.getDate() + i);
+
+    return getDateKey(date);
+  });
+}
+
+function formatDate(date = new Date()) {
+
+  return date.toLocaleDateString(
+    "fr-FR",
+    {
+      weekday: "long",
+      day: "numeric",
+      month: "long"
+    }
+  ).toUpperCase();
+}
+
+function loadData() {
+
+  try {
+
+    const stored = localStorage.getItem(STORAGE_KEY);
+
+    history = stored
+      ? JSON.parse(stored)
+      : {};
+
+  } catch {
+
+    history = {};
+  }
+
+  const todayKey = getDateKey();
+
+  todayChecks = history[todayKey]
+    ? { ...history[todayKey] }
+    : {};
+
+  saved = !!history[todayKey];
+}
+
+function buildTrajectory(data) {
+
+  const days = Object.keys(data).sort();
+
+  let capital = 100;
+
+  const points = [];
+
+  const jokerUsedByWeek = {};
+
+  days.forEach(dateKey => {
+
+    const checks = data[dateKey] || {};
+
+    const date = dateFromKey(dateKey);
+
+    const weekId = getWeekId(date);
+
+    if (!jokerUsedByWeek[weekId]) {
+      jokerUsedByWeek[weekId] = {};
+    }
+
+    let validated = 0;
+
+    habits.forEach(habit => {
+
+      if (checks[habit.id]) {
+
+        validated += 1;
+
+        return;
+      }
+
+      if (habit.target === 6) {
+
+        const jokerUsed =
+          jokerUsedByWeek[weekId][habit.id];
+
+        if (!jokerUsed) {
+
+          jokerUsedByWeek[weekId][habit.id] = true;
+
+          validated += 1;
+        }
+      }
+    });
+
+    const dailyScore =
+      validated / habits.length;
+
+    capital *= 1 + (0.01 * dailyScore);
+
+    points.push({
+      date: dateKey,
+      capital,
+      dailyScore
+    });
+  });
+
+  return {
+    value: capital,
+    points
+  };
+}
+
+function renderToday() {
+
+  const list =
+    document.getElementById("habitList");
+
+  list.innerHTML = "";
+
+  habits.forEach(habit => {
+
+    const checked =
+      !!todayChecks[habit.id];
+
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "habit" + (checked ? " done" : "");
+
+    button.innerHTML = `
+      <div class="habit-left">
+
+        <div class="habit-icon">
+          ${habit.icon}
+        </div>
+
+        <div>
+
+          <div class="habit-name">
+            ${habit.name}
+          </div>
+
+          <div class="habit-rule">
+            ${
+              habit.target === 7
+                ? "Tous les jours"
+                : "1 jour off / semaine"
+            }
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="checkbox">
+        ${checked ? "✓" : ""}
+      </div>
+    `;
+
+    button.onclick = () => {
+
+      todayChecks[habit.id] =
+        !todayChecks[habit.id];
+
+      saved = false;
+
+      renderToday();
+    };
+
+    list.appendChild(button);
+  });
+
+  const done =
+    habits.filter(
+      habit => todayChecks[habit.id]
+    ).length;
+
+  document.getElementById(
+    "dailyNumber"
+  ).textContent = `${done}/7`;
+
+  document.getElementById(
+    "saveButton"
+  ).textContent =
+    saved
+      ? "Journée enregistrée ✓"
+      : "Enregistrer ma journée";
+}
+
+function saveToday() {
+
+  const todayKey = getDateKey();
+
+  history[todayKey] = {
+    ...todayChecks
+  };
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(history)
+  );
+
+  saved = true;
+
+  renderToday();
+
+  renderTrajectory();
+}
+
+function weekCount(habitId) {
+
+  const keys = getWeekKeys();
+
+  const todayKey = getDateKey();
+
+  return keys.filter(key => {
+
+    if (key === todayKey) {
+      return !!todayChecks[habitId];
+    }
+
+    return !!history[key]?.[habitId];
+
+  }).length;
+}
+
+function habitWeekScore(habit) {
+
+  const count = weekCount(habit.id);
+
+  return Math.min(
+    100,
+    Math.round(
+      (count / habit.target) * 100
+    )
+  );
+}
+
+function overallWeekScore() {
+
+  const scores =
+    habits.map(habitWeekScore);
+
+  return Math.round(
+    scores.reduce(
+      (total, value) =>
+        total + value,
+      0
+    ) / scores.length
+  );
+}
+
+function renderTrajectory() {
+
+  const trajectory =
+    buildTrajectory(history);
+
+  const capitalBuilt =
+    trajectory.value - 100;
+
+  document.getElementById(
+    "capitalValue"
+  ).textContent =
+    `+${capitalBuilt.toFixed(1)}%`;
+
+  document.getElementById(
+    "daysValue"
+  ).textContent =
+    Object.keys(history).length;
+
+  document.getElementById(
+    "weekValue"
+  ).textContent =
+    `${overallWeekScore()}%`;
+
+  renderProgress();
+
+  renderChart(trajectory.points);
+}
+
+function renderProgress() {
+
+  const container =
+    document.getElementById("progressList");
+
+  container.innerHTML = "";
+
+  habits.forEach(habit => {
+
+    const count =
+      weekCount(habit.id);
+
+    const score =
+      habitWeekScore(habit);
+
+    const row =
+      document.createElement("div");
+
+    row.className = "progress-row";
+
+    row.innerHTML = `
+      <div class="progress-icon">
+        ${habit.icon}
+      </div>
+
+      <div class="progress-content">
+
+        <div class="progress-top">
+
+          <div class="progress-name">
+            ${habit.name}
+          </div>
+
+          <div class="progress-value">
+            ${count}/${habit.target}
+          </div>
+
+        </div>
+
+        <div class="track">
+          <div
+            class="fill"
+            style="width:${score}%">
+          </div>
+        </div>
+
+      </div>
+    `;
+
+    container.appendChild(row);
+  });
+}
+
+function renderChart(points) {
+
+  const container =
+    document.getElementById("chartContainer");
+
+  if (points.length === 0) {
+
+    container.innerHTML = `
+      <div class="empty-chart">
+        Ta courbe commence avec ta première journée.
+      </div>
+    `;
+
+    return;
+  }
+
+  const width = 400;
+  const height = 150;
+
+  const actual = [
+    100,
+    ...points.map(p => p.capital)
+  ];
+
+  const ideal = [100];
+
+  let idealCapital = 100;
+
+  for (
+    let i = 0;
+    i < points.length;
+    i++
+  ) {
+
+    idealCapital *= 1.01;
+
+    ideal.push(idealCapital);
+  }
+
+  const max =
+    Math.max(
+      ...actual,
+      ...ideal,
+      101
+    );
+
+  const min = 100;
+
+  const range =
+    max - min || 1;
+
+  function x(index, total) {
+
+    if (total <= 1) return 0;
+
+    return (
+      index /
+      (total - 1)
+    ) * width;
+  }
+
+  function y(value) {
+
+    return (
+      height -
+      15 -
+      (
+        (value - min) /
+        range
+      ) *
+      (height - 30)
+    );
+  }
+
+  function makePoints(values) {
+
+    return values.map(
+      (value, index) =>
+        `${x(index, values.length)},${y(value)}`
+    ).join(" ");
+  }
+
+  container.innerHTML = `
+    <svg
+      id="chart"
+      viewBox="0 0 ${width} ${height}"
+      preserveAspectRatio="none"
+    >
+
+      <line
+        x1="0"
+        y1="20"
+        x2="${width}"
+        y2="20"
+        stroke="#E5E4DE"
+        stroke-width="1"
+      />
+
+      <line
+        x1="0"
+        y1="75"
+        x2="${width}"
+        y2="75"
+        stroke="#E5E4DE"
+        stroke-width="1"
+      />
+
+      <line
+        x1="0"
+        y1="130"
+        x2="${width}"
+        y2="130"
+        stroke="#E5E4DE"
+        stroke-width="1"
+      />
+
+      <polyline
+        points="${makePoints(ideal)}"
+        fill="none"
+        stroke="#AAAAAA"
+        stroke-width="1.5"
+        vector-effect="non-scaling-stroke"
+      />
+
+      <polyline
+        points="${makePoints(actual)}"
+        fill="none"
+        stroke="#171717"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        vector-effect="non-scaling-stroke"
+      />
+
+    </svg>
+  `;
+}
+
+function showScreen(screen) {
+
+  const todayScreen =
+    document.getElementById("todayScreen");
+
+  const trajectoryScreen =
+    document.getElementById("trajectoryScreen");
+
+  const todayNav =
+    document.getElementById("todayNav");
+
+  const trajectoryNav =
+    document.getElementById("trajectoryNav");
+
+  if (screen === "today") {
+
+    todayScreen.classList.remove("hidden");
+
+    trajectoryScreen.classList.add("hidden");
+
+    todayNav.classList.add("active");
+
+    trajectoryNav.classList.remove("active");
+
+  } else {
+
+    todayScreen.classList.add("hidden");
+
+    trajectoryScreen.classList.remove("hidden");
+
+    todayNav.classList.remove("active");
+
+    trajectoryNav.classList.add("active");
+
+    renderTrajectory();
+  }
+
+  window.scrollTo(0, 0);
+}
+
+document.getElementById(
+  "todayDate"
+).textContent = formatDate();
+
+document.getElementById(
+  "saveButton"
+).onclick = saveToday;
+
+document.getElementById(
+  "todayNav"
+).onclick =
+  () => showScreen("today");
+
+document.getElementById(
+  "trajectoryNav"
+).onclick =
+  () => showScreen("trajectory");
+
+loadData();
+
+renderToday();
+
+renderTrajectory();
+
+</script>
+
+</body>
+</html>

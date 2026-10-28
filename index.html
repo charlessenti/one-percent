@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <link rel="manifest" href="manifest.json">
-  <meta name="mobile-web-app-capable" content="yes">
-  
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
   <meta name="theme-color" content="#F6F5EF">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <link rel="manifest" href="manifest.json">
 
   <title>1%</title>
 
@@ -415,12 +420,6 @@
       font-size: 13px;
       text-align: center;
     }
-
-    @media (min-width: 700px) {
-      .app {
-        padding-top: 35px;
-      }
-    }
   </style>
 </head>
 
@@ -432,8 +431,6 @@
       <div class="logo">1%</div>
       <div class="tag">UN JOUR À LA FOIS</div>
     </header>
-
-    <!-- AUJOURD'HUI -->
 
     <section id="todayScreen">
 
@@ -458,8 +455,6 @@
 
     </section>
 
-    <!-- TRAJECTOIRE -->
-
     <section id="trajectoryScreen" class="hidden">
 
       <div class="eyebrow">MA TRAJECTOIRE</div>
@@ -474,9 +469,13 @@
         depuis le début de ma trajectoire
       </div>
 
-      <div class="chart-container" id="chartContainer"></div>
+      <div
+        class="chart-container"
+        id="chartContainer"
+      ></div>
 
       <div class="legend">
+
         <div class="legend-item">
           <div class="legend-line"></div>
           Ma trajectoire
@@ -486,41 +485,67 @@
           <div class="legend-line grey"></div>
           Potentiel 1%
         </div>
+
       </div>
 
       <div class="stats">
+
         <div class="stat">
-          <div class="stat-value" id="daysValue">0</div>
-          <div class="stat-label">jours</div>
+          <div
+            class="stat-value"
+            id="daysValue"
+          >
+            0
+          </div>
+
+          <div class="stat-label">
+            jours
+          </div>
         </div>
 
         <div class="stat">
-          <div class="stat-value" id="weekValue">0%</div>
-          <div class="stat-label">cette semaine</div>
+          <div
+            class="stat-value"
+            id="weekValue"
+          >
+            0%
+          </div>
+
+          <div class="stat-label">
+            cette semaine
+          </div>
         </div>
+
       </div>
 
       <div class="section-title">
         Cette semaine
       </div>
 
-      <div class="section-subtitle">
-        6/7 suffit pour les habitudes avec un jour off.
-      </div>
+      <div
+        class="section-subtitle"
+        id="weekSubtitle"
+      ></div>
 
-      <div class="progress-list" id="progressList"></div>
+      <div
+        class="progress-list"
+        id="progressList"
+      ></div>
 
       <div class="compound-note">
+
         <div class="compound-title">
           L'effet composé
         </div>
 
         <div class="compound-text">
-          Chaque jour peut ajouter jusqu'à 1 % à ta trajectoire.
-          Pour les habitudes en 6/7, ton premier jour off de la
-          semaine ne ralentit pas la progression. La régularité
-          compte davantage que la perfection.
+          Chaque jour peut ajouter jusqu'à 1 % à ta
+          trajectoire. Pour les habitudes avec un jour
+          off, un repos par semaine ne ralentit pas la
+          progression. La régularité compte davantage
+          que la perfection.
         </div>
+
       </div>
 
     </section>
@@ -529,11 +554,17 @@
 
   <nav class="nav">
 
-    <button class="nav-button active" id="todayNav">
+    <button
+      class="nav-button active"
+      id="todayNav"
+    >
       Aujourd'hui
     </button>
 
-    <button class="nav-button" id="trajectoryNav">
+    <button
+      class="nav-button"
+      id="trajectoryNav"
+    >
       Trajectoire
     </button>
 
@@ -543,14 +574,60 @@
 
 const STORAGE_KEY = "onepercent_v1";
 
+/*
+  JOUR 1 DE 1 %
+
+  Mercredi 28 octobre 2026.
+
+  Rien avant cette date n'existe
+  dans la trajectoire.
+*/
+
+const START_DATE_KEY = "2026-10-28";
+
 const habits = [
-  { id: "steps", icon: "🚶", name: "10 000 pas", target: 7 },
-  { id: "sport", icon: "🏋️", name: "Muscu ou cardio", target: 6 },
-  { id: "reading", icon: "📖", name: "Lire 10 pages", target: 6 },
-  { id: "sleep", icon: "😴", name: "8 h de sommeil", target: 7 },
-  { id: "social", icon: "🤝", name: "Proposer quelque chose", target: 6 },
-  { id: "meditation", icon: "🧘", name: "1 séance de méditation", target: 6 },
-  { id: "create", icon: "🛠️", name: "Créer quelque chose", target: 6 }
+  {
+    id: "steps",
+    icon: "🚶",
+    name: "10 000 pas",
+    target: 7
+  },
+  {
+    id: "sport",
+    icon: "🏋️",
+    name: "Muscu ou cardio",
+    target: 6
+  },
+  {
+    id: "reading",
+    icon: "📖",
+    name: "Lire 10 pages",
+    target: 6
+  },
+  {
+    id: "sleep",
+    icon: "😴",
+    name: "8 h de sommeil",
+    target: 7
+  },
+  {
+    id: "social",
+    icon: "🤝",
+    name: "Proposer quelque chose",
+    target: 6
+  },
+  {
+    id: "meditation",
+    icon: "🧘",
+    name: "1 séance de méditation",
+    target: 6
+  },
+  {
+    id: "create",
+    icon: "🛠️",
+    name: "Créer quelque chose",
+    target: 6
+  }
 ];
 
 let history = {};
@@ -561,18 +638,34 @@ function getDateKey(date = new Date()) {
 
   const y = date.getFullYear();
 
-  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const m =
+    String(date.getMonth() + 1)
+      .padStart(2, "0");
 
-  const d = String(date.getDate()).padStart(2, "0");
+  const d =
+    String(date.getDate())
+      .padStart(2, "0");
 
   return `${y}-${m}-${d}`;
 }
 
 function dateFromKey(key) {
 
-  const [y, m, d] = key.split("-").map(Number);
+  const [y, m, d] =
+    key.split("-").map(Number);
 
   return new Date(y, m - 1, d);
+}
+
+function addDays(date, number) {
+
+  const copy = new Date(date);
+
+  copy.setDate(copy.getDate() + number);
+
+  copy.setHours(0, 0, 0, 0);
+
+  return copy;
 }
 
 function getMonday(date = new Date()) {
@@ -581,9 +674,12 @@ function getMonday(date = new Date()) {
 
   const day = copy.getDay();
 
-  const diff = day === 0 ? -6 : 1 - day;
+  const diff =
+    day === 0 ? -6 : 1 - day;
 
-  copy.setDate(copy.getDate() + diff);
+  copy.setDate(
+    copy.getDate() + diff
+  );
 
   copy.setHours(0, 0, 0, 0);
 
@@ -594,59 +690,162 @@ function getWeekId(date) {
   return getDateKey(getMonday(date));
 }
 
-function getWeekKeys(reference = new Date()) {
+function getCurrentWeekInfo() {
 
-  const monday = getMonday(reference);
+  const today = new Date();
 
-  return Array.from({ length: 7 }, (_, i) => {
+  today.setHours(0, 0, 0, 0);
 
-    const date = new Date(monday);
+  const normalMonday =
+    getMonday(today);
 
-    date.setDate(monday.getDate() + i);
+  const startDate =
+    dateFromKey(START_DATE_KEY);
 
-    return getDateKey(date);
-  });
+  /*
+    Pour la toute première semaine,
+    on commence mercredi 28 et non lundi 26.
+  */
+
+  const effectiveStart =
+    normalMonday < startDate
+      ? startDate
+      : normalMonday;
+
+  const sunday =
+    addDays(normalMonday, 6);
+
+  const totalAvailableDays =
+    Math.round(
+      (sunday - effectiveStart) /
+      86400000
+    ) + 1;
+
+  return {
+    start: effectiveStart,
+    end: sunday,
+    totalAvailableDays
+  };
+}
+
+function getCurrentWeekKeys() {
+
+  const info =
+    getCurrentWeekInfo();
+
+  const keys = [];
+
+  let current =
+    new Date(info.start);
+
+  while (current <= info.end) {
+
+    keys.push(
+      getDateKey(current)
+    );
+
+    current =
+      addDays(current, 1);
+  }
+
+  return keys;
+}
+
+function getCurrentWeekTarget(habit) {
+
+  const info =
+    getCurrentWeekInfo();
+
+  /*
+    7/7 :
+    tous les jours disponibles.
+
+    6/7 :
+    un jour off reste autorisé.
+
+    Première semaine :
+    5 jours disponibles.
+    Donc 5/5 ou 4/5.
+  */
+
+  if (habit.target === 7) {
+    return info.totalAvailableDays;
+  }
+
+  return Math.max(
+    0,
+    info.totalAvailableDays - 1
+  );
 }
 
 function formatDate(date = new Date()) {
 
-  return date.toLocaleDateString(
-    "fr-FR",
-    {
-      weekday: "long",
-      day: "numeric",
-      month: "long"
-    }
-  ).toUpperCase();
+  return date
+    .toLocaleDateString(
+      "fr-FR",
+      {
+        weekday: "long",
+        day: "numeric",
+        month: "long"
+      }
+    )
+    .toUpperCase();
 }
 
 function loadData() {
 
   try {
 
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored =
+      localStorage.getItem(
+        STORAGE_KEY
+      );
 
-    history = stored
-      ? JSON.parse(stored)
-      : {};
+    history =
+      stored
+        ? JSON.parse(stored)
+        : {};
 
   } catch {
 
     history = {};
   }
 
-  const todayKey = getDateKey();
+  /*
+    Protection :
+    toute éventuelle donnée antérieure
+    au lancement est ignorée.
+  */
 
-  todayChecks = history[todayKey]
-    ? { ...history[todayKey] }
-    : {};
+  Object.keys(history)
+    .forEach(key => {
 
-  saved = !!history[todayKey];
+      if (key < START_DATE_KEY) {
+        delete history[key];
+      }
+
+    });
+
+  const todayKey =
+    getDateKey();
+
+  todayChecks =
+    history[todayKey]
+      ? { ...history[todayKey] }
+      : {};
+
+  saved =
+    !!history[todayKey];
 }
 
 function buildTrajectory(data) {
 
-  const days = Object.keys(data).sort();
+  const days =
+    Object.keys(data)
+      .filter(
+        key => key >= START_DATE_KEY
+      )
+      .sort();
 
   let capital = 100;
 
@@ -656,13 +855,18 @@ function buildTrajectory(data) {
 
   days.forEach(dateKey => {
 
-    const checks = data[dateKey] || {};
+    const checks =
+      data[dateKey] || {};
 
-    const date = dateFromKey(dateKey);
+    const date =
+      dateFromKey(dateKey);
 
-    const weekId = getWeekId(date);
+    const weekId =
+      getWeekId(date);
 
-    if (!jokerUsedByWeek[weekId]) {
+    if (
+      !jokerUsedByWeek[weekId]
+    ) {
       jokerUsedByWeek[weekId] = {};
     }
 
@@ -677,14 +881,26 @@ function buildTrajectory(data) {
         return;
       }
 
+      /*
+        Chaque habitude 6/7 dispose
+        d'un joker par semaine.
+
+        Donc le premier jour off
+        ne pénalise pas la trajectoire.
+      */
+
       if (habit.target === 6) {
 
         const jokerUsed =
-          jokerUsedByWeek[weekId][habit.id];
+          jokerUsedByWeek[weekId][
+            habit.id
+          ];
 
         if (!jokerUsed) {
 
-          jokerUsedByWeek[weekId][habit.id] = true;
+          jokerUsedByWeek[weekId][
+            habit.id
+          ] = true;
 
           validated += 1;
         }
@@ -692,9 +908,12 @@ function buildTrajectory(data) {
     });
 
     const dailyScore =
-      validated / habits.length;
+      validated /
+      habits.length;
 
-    capital *= 1 + (0.01 * dailyScore);
+    capital *=
+      1 +
+      (0.01 * dailyScore);
 
     points.push({
       date: dateKey,
@@ -712,7 +931,9 @@ function buildTrajectory(data) {
 function renderToday() {
 
   const list =
-    document.getElementById("habitList");
+    document.getElementById(
+      "habitList"
+    );
 
   list.innerHTML = "";
 
@@ -722,10 +943,13 @@ function renderToday() {
       !!todayChecks[habit.id];
 
     const button =
-      document.createElement("button");
+      document.createElement(
+        "button"
+      );
 
     button.className =
-      "habit" + (checked ? " done" : "");
+      "habit" +
+      (checked ? " done" : "");
 
     button.innerHTML = `
       <div class="habit-left">
@@ -772,12 +996,14 @@ function renderToday() {
 
   const done =
     habits.filter(
-      habit => todayChecks[habit.id]
+      habit =>
+        todayChecks[habit.id]
     ).length;
 
   document.getElementById(
     "dailyNumber"
-  ).textContent = `${done}/7`;
+  ).textContent =
+    `${done}/7`;
 
   document.getElementById(
     "saveButton"
@@ -789,7 +1015,8 @@ function renderToday() {
 
 function saveToday() {
 
-  const todayKey = getDateKey();
+  const todayKey =
+    getDateKey();
 
   history[todayKey] = {
     ...todayChecks
@@ -809,44 +1036,160 @@ function saveToday() {
 
 function weekCount(habitId) {
 
-  const keys = getWeekKeys();
+  const keys =
+    getCurrentWeekKeys();
 
-  const todayKey = getDateKey();
+  const todayKey =
+    getDateKey();
 
   return keys.filter(key => {
 
-    if (key === todayKey) {
-      return !!todayChecks[habitId];
+    /*
+      Les jours futurs ne peuvent
+      évidemment pas être cochés.
+    */
+
+    if (key > todayKey) {
+      return false;
     }
 
-    return !!history[key]?.[habitId];
+    if (key === todayKey) {
+
+      return !!todayChecks[
+        habitId
+      ];
+    }
+
+    return !!history[key]?.[
+      habitId
+    ];
 
   }).length;
 }
 
 function habitWeekScore(habit) {
 
-  const count = weekCount(habit.id);
+  const count =
+    weekCount(habit.id);
+
+  const target =
+    getCurrentWeekTarget(habit);
+
+  if (target === 0) {
+    return 100;
+  }
 
   return Math.min(
     100,
     Math.round(
-      (count / habit.target) * 100
+      (count / target) * 100
     )
   );
 }
 
+function getElapsedWeekKeys() {
+
+  const keys =
+    getCurrentWeekKeys();
+
+  const todayKey =
+    getDateKey();
+
+  return keys.filter(
+    key => key <= todayKey
+  );
+}
+
+/*
+  SCORE "CETTE SEMAINE"
+
+  Celui-ci mesure la constance
+  jusqu'à aujourd'hui.
+
+  Il ne te pénalise donc pas
+  mercredi parce que jeudi,
+  vendredi, samedi et dimanche
+  n'ont pas encore eu lieu.
+*/
+
 function overallWeekScore() {
 
-  const scores =
-    habits.map(habitWeekScore);
+  const elapsedKeys =
+    getElapsedWeekKeys();
+
+  if (
+    elapsedKeys.length === 0
+  ) {
+    return 0;
+  }
+
+  const jokerUsed = {};
+
+  let validated = 0;
+
+  let possible =
+    elapsedKeys.length *
+    habits.length;
+
+  habits.forEach(habit => {
+
+    jokerUsed[habit.id] = false;
+
+  });
+
+  elapsedKeys.forEach(key => {
+
+    habits.forEach(habit => {
+
+      let done;
+
+      if (
+        key === getDateKey()
+      ) {
+
+        done =
+          !!todayChecks[
+            habit.id
+          ];
+
+      } else {
+
+        done =
+          !!history[key]?.[
+            habit.id
+          ];
+      }
+
+      if (done) {
+
+        validated += 1;
+
+        return;
+      }
+
+      if (
+        habit.target === 6 &&
+        !jokerUsed[habit.id]
+      ) {
+
+        /*
+          Le jour off autorisé
+          compte comme conforme
+          au contrat hebdomadaire.
+        */
+
+        jokerUsed[habit.id] =
+          true;
+
+        validated += 1;
+      }
+
+    });
+  });
 
   return Math.round(
-    scores.reduce(
-      (total, value) =>
-        total + value,
-      0
-    ) / scores.length
+    (validated / possible) *
+    100
   );
 }
 
@@ -866,22 +1209,46 @@ function renderTrajectory() {
   document.getElementById(
     "daysValue"
   ).textContent =
-    Object.keys(history).length;
+    Object.keys(history)
+      .filter(
+        key =>
+          key >= START_DATE_KEY
+      )
+      .length;
 
   document.getElementById(
     "weekValue"
   ).textContent =
     `${overallWeekScore()}%`;
 
+  const info =
+    getCurrentWeekInfo();
+
+  const firstWeek =
+    getDateKey(info.start) ===
+    START_DATE_KEY &&
+    info.totalAvailableDays < 7;
+
+  document.getElementById(
+    "weekSubtitle"
+  ).textContent =
+    firstWeek
+      ? "Semaine de départ : mercredi → dimanche. Objectifs adaptés à 5 jours."
+      : "6/7 suffit pour les habitudes avec un jour off.";
+
   renderProgress();
 
-  renderChart(trajectory.points);
+  renderChart(
+    trajectory.points
+  );
 }
 
 function renderProgress() {
 
   const container =
-    document.getElementById("progressList");
+    document.getElementById(
+      "progressList"
+    );
 
   container.innerHTML = "";
 
@@ -890,13 +1257,23 @@ function renderProgress() {
     const count =
       weekCount(habit.id);
 
+    const target =
+      getCurrentWeekTarget(
+        habit
+      );
+
     const score =
-      habitWeekScore(habit);
+      habitWeekScore(
+        habit
+      );
 
     const row =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
-    row.className = "progress-row";
+    row.className =
+      "progress-row";
 
     row.innerHTML = `
       <div class="progress-icon">
@@ -912,31 +1289,39 @@ function renderProgress() {
           </div>
 
           <div class="progress-value">
-            ${count}/${habit.target}
+            ${count}/${target}
           </div>
 
         </div>
 
         <div class="track">
+
           <div
             class="fill"
             style="width:${score}%">
           </div>
+
         </div>
 
       </div>
     `;
 
-    container.appendChild(row);
+    container.appendChild(
+      row
+    );
   });
 }
 
 function renderChart(points) {
 
   const container =
-    document.getElementById("chartContainer");
+    document.getElementById(
+      "chartContainer"
+    );
 
-  if (points.length === 0) {
+  if (
+    points.length === 0
+  ) {
 
     container.innerHTML = `
       <div class="empty-chart">
@@ -952,7 +1337,9 @@ function renderChart(points) {
 
   const actual = [
     100,
-    ...points.map(p => p.capital)
+    ...points.map(
+      p => p.capital
+    )
   ];
 
   const ideal = [100];
@@ -967,7 +1354,9 @@ function renderChart(points) {
 
     idealCapital *= 1.01;
 
-    ideal.push(idealCapital);
+    ideal.push(
+      idealCapital
+    );
   }
 
   const max =
@@ -984,7 +1373,9 @@ function renderChart(points) {
 
   function x(index, total) {
 
-    if (total <= 1) return 0;
+    if (total <= 1) {
+      return 0;
+    }
 
     return (
       index /
@@ -1007,10 +1398,15 @@ function renderChart(points) {
 
   function makePoints(values) {
 
-    return values.map(
-      (value, index) =>
-        `${x(index, values.length)},${y(value)}`
-    ).join(" ");
+    return values
+      .map(
+        (value, index) =>
+          `${x(
+            index,
+            values.length
+          )},${y(value)}`
+      )
+      .join(" ");
   }
 
   container.innerHTML = `
@@ -1048,7 +1444,9 @@ function renderChart(points) {
       />
 
       <polyline
-        points="${makePoints(ideal)}"
+        points="${makePoints(
+          ideal
+        )}"
         fill="none"
         stroke="#AAAAAA"
         stroke-width="1.5"
@@ -1056,7 +1454,9 @@ function renderChart(points) {
       />
 
       <polyline
-        points="${makePoints(actual)}"
+        points="${makePoints(
+          actual
+        )}"
         fill="none"
         stroke="#171717"
         stroke-width="3"
@@ -1072,60 +1472,93 @@ function renderChart(points) {
 function showScreen(screen) {
 
   const todayScreen =
-    document.getElementById("todayScreen");
+    document.getElementById(
+      "todayScreen"
+    );
 
   const trajectoryScreen =
-    document.getElementById("trajectoryScreen");
+    document.getElementById(
+      "trajectoryScreen"
+    );
 
   const todayNav =
-    document.getElementById("todayNav");
+    document.getElementById(
+      "todayNav"
+    );
 
   const trajectoryNav =
-    document.getElementById("trajectoryNav");
+    document.getElementById(
+      "trajectoryNav"
+    );
 
-  if (screen === "today") {
+  if (
+    screen === "today"
+  ) {
 
-    todayScreen.classList.remove("hidden");
+    todayScreen
+      .classList
+      .remove("hidden");
 
-    trajectoryScreen.classList.add("hidden");
+    trajectoryScreen
+      .classList
+      .add("hidden");
 
-    todayNav.classList.add("active");
+    todayNav
+      .classList
+      .add("active");
 
-    trajectoryNav.classList.remove("active");
+    trajectoryNav
+      .classList
+      .remove("active");
 
   } else {
 
-    todayScreen.classList.add("hidden");
+    todayScreen
+      .classList
+      .add("hidden");
 
-    trajectoryScreen.classList.remove("hidden");
+    trajectoryScreen
+      .classList
+      .remove("hidden");
 
-    todayNav.classList.remove("active");
+    todayNav
+      .classList
+      .remove("active");
 
-    trajectoryNav.classList.add("active");
+    trajectoryNav
+      .classList
+      .add("active");
 
     renderTrajectory();
   }
 
-  window.scrollTo(0, 0);
+  window.scrollTo(
+    0,
+    0
+  );
 }
 
 document.getElementById(
   "todayDate"
-).textContent = formatDate();
+).textContent =
+  formatDate();
 
 document.getElementById(
   "saveButton"
-).onclick = saveToday;
+).onclick =
+  saveToday;
 
 document.getElementById(
   "todayNav"
 ).onclick =
-  () => showScreen("today");
+  () =>
+    showScreen("today");
 
 document.getElementById(
   "trajectoryNav"
 ).onclick =
-  () => showScreen("trajectory");
+  () =>
+    showScreen("trajectory");
 
 loadData();
 
